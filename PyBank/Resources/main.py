@@ -1,33 +1,57 @@
+
 import csv
 import os
 budget_data = os.path.join('..','Resources','budget_data.csv')
 
-with open(budget_data, 'r') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter =",")
-    csv_header = next(csv_reader)
-    print(csv_header)
+#add lists
+totalmonths = []
+netprofit = []
+profitchange = []
 
-    total_months = []
-    total_profit = []
-    date =[]
-    monthly_profit_change =[]
+# Open and read csv file
+with open("budget_data.csv","r") as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=",")
+    next(csvreader)
     
-    
-    for row in csv_reader:
-        total_months.append(row[0])
-        total_profit.append(int(row[1]))
-        months_count = len((total_months))
-        # find monthly change in profit
-    for i in range(len(total_profit)-1):
-        monthly_profit_change.append(total_profit[i+1]-total_profit[i])
+    #for lope 
+    for row in csvreader:
+        totalmonths.append(row[0])
+        netprofit.append(int(row[1]))
         
+    for i in range(len(netprofit)-1):
+        profitchange.append(netprofit[i+1]-netprofit[i])
 
-    print(sum(monthly_profit_change)/len(monthly_profit_change))
+# max and min values
+increase = max(profitchange)
+decrease = min(profitchange)
 
+monthlyincrease = profitchange.index(max(profitchange))+1
+monthlydecrease = profitchange.index(min(profitchange))+1
 
-    print(months_count)  
-    print(sum(total_profit))
+# print results
+print("Financial Analysis")
+print("-------------------")
+print(f"Total Months:{len(totalmonths)}")
+print(f"Total: ${sum(netprofit)}")
+print(f"Average Change:{round(sum(profitchange)/len(profitchange),2)}")
+print(f"Greatest Increase in Profits: {totalmonths[monthlyincrease]} (${(str(increase))})")
+print(f"Greatest Decrease in Profits: {totalmonths[monthlydecrease]} (${(str(decrease))})")
 
-
+# export text file 
+output = "output.txt"
+with open("output","w") as new:
+    new.write("Financial Analysis")
+    new.write("\n")
+    new.write("--------------------")
+    new.write("\n")
+    new.write(f"Total Months:{len(totalmonths)}")
+    new.write("\n")
+    new.write(f"Total: ${sum(netprofit)}")
+    new.write("\n")
+    new.write(f"Average Change: {round(sum(profitchange)/len(profitchange),2)}")
+    new.write("\n")
+    new.write(f"Greatest Increase in Profits: {totalmonths[monthlyincrease]} (${(str(increase))})")
+    new.write("\n")
+    new.write(f"Greatest Decrease in Profits: {totalmonths[monthlydecrease]} (${(str(increase))})")
 
     
